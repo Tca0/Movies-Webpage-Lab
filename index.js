@@ -7,9 +7,37 @@ const options = {
 };
 console.log('hello')
 const moviesData = async () => {
-    fetch('https://movie-database-alternative.p.rapidapi.com/?r=json&i=tt4154796', options)
+    fetch('https://movie-database-alternative.p.rapidapi.com/?s=Avengers%20Endgame&r=json&page=1', options)
 	.then(response => response.json())
-	.then(response => console.log(response))
+	.then(response => {
+        console.log(response, typeof response, Object.keys(response))
+        console.log(response.Search)
+        const movies = response.Search;
+        movies.forEach(movie => {
+            console.log(movie.Title)
+            // creating a div container to each movie
+            const movieCard = document.createElement('div')
+            movieCard.classList.add('movieCard-container')
+            // append div to the main body
+            document.querySelector('main').appendChild(movieCard)
+
+
+            // creating header tag and attaching it to the header of card
+            const movieTitle = document.createElement('h2');
+            movieTitle.textContent = movie.Title;
+            movieCard.appendChild(movieTitle)
+            // creating released year  and attaching it to the header
+            const releasedYear = document.createElement('h3')
+            releasedYear.textContent = 'released year: '+ movie.Year
+            movieCard.appendChild(releasedYear)
+
+            // creating image tag and attaching it after the header
+            const movieImage = document.createElement('img');
+            movieImage.src = movie.Poster
+            movieCard.appendChild(movieImage)
+            
+        });
+    })
 	.catch(err => console.error(err));
 }
 moviesData()
